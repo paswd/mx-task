@@ -20,7 +20,7 @@ struct tpoint_r {
 		this->X = 0.;
 		this->Y = 0.;
 	}
-	
+
 	void Print(void) {
 		cout << this->X << " : " << this->Y << endl;
 	}
