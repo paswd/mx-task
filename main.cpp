@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -21,7 +22,7 @@ struct tpoint_r {
 	}
 	
 	void Print(void) {
-		cout << this->X << ":" << this->Y << endl;
+		cout << this->X << " : " << this->Y << endl;
 	}
 };
 
@@ -93,6 +94,49 @@ vector <tpoint_r> Parse(string in) {
 	return res;
 }
 
+vector <tpoint_r> Sort(vector <tpoint_r> arr) {
+	bool change;
+	for (size_t i = 0; i < arr.size(); i++) {
+		change = false;
+		for (size_t j = 1; j < arr.size() - i; j++) {
+			if (arr[j - 1].X > arr[j].X) {
+				tpoint_r tmp = arr[j - 1];
+				arr[j - 1] = arr[j];
+				arr[j] = tmp;
+				change = true;
+			}
+		}
+		if (!change) {
+			break;
+		}
+	}
+	return arr;
+}
+
+double Distance(tpoint_r a, tpoint_r b) {
+	double x_quadr = pow(a.X - b.X, 2);
+	double y_quadr = pow(a.Y - b.Y, 2);
+	return sqrt(x_quadr + y_quadr);
+}
+
+double Length(vector <tpoint_r> arr) {
+	double summ = 0.;
+	for (size_t i = 1; i < arr.size(); i++) {
+		summ += Distance(arr[i - 1], arr[i]);
+	}
+	return summ;
+}
+double MaxDistance(vector <tpoint_r> arr) {
+	double max = 0.;
+	for (size_t i = 1; i < arr.size(); i++) {
+		double tmp = Distance(arr[i - 1], arr[i]);
+		if (tmp > max) {
+			max = tmp;
+		}
+	}
+	return max;
+}
+
 int main(void) {
 	vector <tpoint_r> arr;
 	string input = "";
@@ -104,8 +148,17 @@ int main(void) {
 	//End adaptation for console
 
 	arr = Parse(input);
+	cout << "Basic array:" << endl;
 	for (size_t i = 0; i < arr.size(); i++) {
 		arr[i].Print();
 	}
+	vector <tpoint_r> sorted_arr = Sort(arr);
+	cout << "Sorted array:" << endl;
+	for (size_t i = 0; i < sorted_arr.size(); i++) {
+		sorted_arr[i].Print();
+	}
+	cout << "Line length: " << Length(sorted_arr) << endl;
+	cout << "Maximal distance: " << MaxDistance(sorted_arr) << endl;
+
 	return 0;
 }
